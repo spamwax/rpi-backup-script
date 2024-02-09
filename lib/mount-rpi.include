@@ -132,6 +132,7 @@ function mount_rpi
 	#If -f fsck option given, then fsck partition before mounting
 	if [ -n "${opts[f]}" ]
 	then
+		# shellcheck disable=SC2068
 		for part in ${order[@]} #Use sorted partition numbers to fsck
 		do
 			echo "fsck /dev/mapper/${device}p${part}"

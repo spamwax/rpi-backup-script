@@ -71,6 +71,7 @@ function umount_rpi
 	order=$(cat $orderfile)
 	
 	#Umount partitions
+	# shellcheck disable=SC2068
 	for part in ${order[@]} #Use sorted partition numbers to mount
 	do
 		#Strip off any trailing / characters
