@@ -1,0 +1,2 @@
+home/pi/.vscode-server-insiders
+home/pi/.vscode-server
