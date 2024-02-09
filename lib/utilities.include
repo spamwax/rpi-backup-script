@@ -6,13 +6,19 @@ function get_parts
 	local partfile="$1"
 
 	#Get the full path to the partition device files
+	# shellcheck disable=SC2006
+	# shellcheck disable=SC2207
+	# shellcheck disable=SC2086
 	parts=(`sed -e 's/^.*loop\([0-9]\+\)p\([0-9]\+\) .*$/\/dev\/mapper\/loop\1p\2/' $partfile`)
 }
 
 function get_device
 {
 	local partfile="$1"
+	# shellcheck disable=SC2006
+	# shellcheck disable=SC2086
 	device=`sed -e 's/^.*\/dev\/\(loop[0-9]\+\) .*$/\1/' <$partfile |grep -v '^$'|grep -v 'loop deleted '|sort|uniq|tr -d '\n'`
+	# device=`sed -e 's/^.*\(add map \|\/dev\/\)\(loop[0-9]\+\).*$/\2/' <$partfile |grep -v '^$'|grep -v 'loop deleted '|sort|uniq|tr -d '\n'`
 }
 
 function is_detached
