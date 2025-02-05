@@ -18,7 +18,12 @@ print_help() {
     echo "Options:"
     echo "  -h, --help     Show this help message and exit"
     echo
-    echo "If no server_name is provided, the default values will be used."
+    echo "If no server_name is provided, the default values will be used:"
+    echo -e "  host: $host    config: $config_path"
+    echo
+    echo "content of servers.json:"
+    echo
+    cat "$json_file"
     exit 0
 }
 
