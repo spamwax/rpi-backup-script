@@ -1,4 +1,12 @@
 home/pi/.vscode-server-insiders
 home/pi/.vscode-server
+home/pi/.cache
+home/pi/printer_data/gcodes
+home/pi/printer_data/logs
+home/pi/timelapse
 home/biqu/.vscode-server-insiders
 home/biqu/.vscode-server
+home/biqu/.cache
+home/biqu/printer_data/gcodes
+home/biqu/printer_data/logs
+home/biqu/timelapse
