@@ -1,5 +1,5 @@
   [
-    { "name": "rpi4", "config": "rpi4-klipper.conf", "ip": "192.168.13.170"},
+    { "name": "cr6", "config": "cr6-klipper.conf", "ip": "192.168.13.170"},
     { "name": "rpi3", "config": "rpi3-klipper.conf", "ip": "192.168.13.150"},
     { "name": "sv08", "config": "sv08-klipper.conf", "ip": "192.168.170.170"}
   ]
