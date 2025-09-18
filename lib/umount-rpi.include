@@ -23,11 +23,11 @@ function umount_rpi
 	#http://www.ostricher.com/2014/10/the-right-way-to-get-the-directory-of-a-bash-script/
 	local sp
 	sp="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-	
+
 	#Load script libraries
 	. "${sp}/../lib/load_config.include"
 	. "${sp}/../lib/utilities.include"
-	
+
 	declare -A opts
 	#Get command line args and process
 	while getopts "uh" opt
@@ -52,16 +52,16 @@ function umount_rpi
 
 	#Load configuration file given on command line
 	load_config "$1"
-	
-	
+
+
 	/bin/echo
 	echo "Umounting $destfile from $destroot"
-	
+
 	local pid=$$
-	
+
 	local partfile="/tmp/${srchost}-partitions-${pid}.txt"
 	local orderfile="/tmp/order.$pid"
-	
+
 	#Get proper order to mount the partitions
 	for k in "${!destpart[@]}"
 	do
@@ -69,7 +69,7 @@ function umount_rpi
 	done | sort -k2 -r -n|cut -d' ' -f1 >$orderfile
 	local order
 	order=$(cat $orderfile)
-	
+
 	#Umount partitions
 	# shellcheck disable=SC2068
 	for part in ${order[@]} #Use sorted partition numbers to mount
@@ -81,24 +81,35 @@ function umount_rpi
 		echo umount "$mp"
 		umount "$mp"
 	done
-	
+
 	/sbin/kpartx "$destfile" >"$partfile"
 
-	if ! is_detached "$partfile"
-	then
-		#If -u is not given (meaning keep attached), then detach from loopback device
-		if [ -z "${opts[u]}" ]
-		then
-			#Destroy loopback
-			/bin/echo
-			echo "Destroy loopback device for backup file $destfile"
-			/sbin/kpartx -d "$destfile" || exit 1
-		else
-			echo "Leaving image file $destfile attached to $device"
-		fi
-	else
-		echo "$destfile not attached to a loopback device"
-	fi
-	
+    loop="$(/sbin/losetup -j "$destfile" | awk -F: '{print $1}')"
+    if ! is_detached "$partfile"; then
+        # Remove kpartx mappings and detach loop
+        /sbin/kpartx -dv "$loop" || true
+        /sbin/losetup -d "$loop" >/dev/null 2>&1 || true
+    else
+        echo "$destfile not attached to a loopback device"
+    fi
+
+	#if ! is_detached "$partfile"
+	#then
+	#	#If -u is not given (meaning keep attached), then detach from loopback device
+	#	if [ -z "${opts[u]}" ]
+	#	then
+	#		#Destroy loopback
+	#		/bin/echo
+	#		echo "Destroy loopback device for backup file $destfile"
+	#		echo /sbin/kpartx -d "$destfile" # || exit 1
+	#		/sbin/kpartx -d "$destfile" # || exit 1
+            #echo "done running kpartx"
+	#	else
+	#		echo "Leaving image file $destfile attached to $device"
+	#	fi
+	#else
+	#	echo "$destfile not attached to a loopback device"
+	#fi
+
 rm -f "$orderfile" "$partfile"
 }

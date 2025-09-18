@@ -24,7 +24,14 @@ function get_device
 function is_detached
 {
 	local partfile="$1"
-	
+
 	#Is destfile dettached from a loopback device
 	cat "$partfile" | grep -q 'loop deleted '
 }
+
+# function is_detached() {
+#     # Return 0 if IMG is NOT attached to any loop device; else return 1
+#     local img="$1"
+#     /sbin/losetup -j "$img" >/dev/null 2>&1 || return 0  # no loop -> detached
+#     return 1                                              # has loop -> attached
+# }

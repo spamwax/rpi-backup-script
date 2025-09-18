@@ -75,4 +75,4 @@ fi
 cd /home/hamid/Downloads/src/rpi-backup-script || exit
 
 # Run backup script with the determined config path
-bin/backup-rpi -s -c "$config_path"
+bin/backup-rpi -s "$config_path"
