@@ -96,10 +96,10 @@ do
 	fstype=$(/sbin/blkid -s TYPE -o value "/dev/mapper/${device}p${part}")
 	# shellcheck disable=SC2128
 	echo "${srchost}:${destpart[$part]} -> $destroot${destpart[$part]} (${fstype})"
-	
+
 	#Set rsync command line to use the default filesystem options
 	rsyncoptions="${rsyncfs[default]}"
-	
+
 	#But if options have been specified for this particular filesystem $fstype
 	if [ -n "${rsyncfs[$fstype]}" ]
 	then #Use them instead
@@ -115,7 +115,7 @@ do
 	# shellcheck disable=SC2128
 	/bin/rsync $rsyncoptions "${srchost}:${destpart[$part]}" "$destroot${destpart[$part]}"
 	/bin/echo
-	
+
 	#If this is an ext[234] filesystem, then add it to our ext_parts array
 	[[ "$fstype" == ext* ]] && ext_parts+=($part)
 done
@@ -129,7 +129,7 @@ then
 	echo "Umount file systems so can run zerofree"
 	#Umount filesystems only (leave image attached to loopback device)
 	umount_rpi -u "$1" || exit 1
-	
+
 	# shellcheck disable=SC2068
 	for part in ${ext_parts[@]} #Get partition numbers from config file
 	do
@@ -158,7 +158,7 @@ then
 		echo "Replacing $destfile with $destfile.$pid"
 		mv -f "$destfile.$pid" "$destfile"
 	fi
-		
+
 fi
 
 echo "Backup complete"
